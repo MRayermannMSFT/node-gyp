@@ -13,9 +13,9 @@ jobs:
       fail-fast: false
       max-parallel: 15
       matrix:
-        node: [14.x, 16.x, 18.x]
+        node: [16.x]
         python: ["3.6", "3.8", "3.10", "3.11"]
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repository
@@ -32,8 +32,11 @@ jobs:
           PYTHON_VERSION: ${{ matrix.python }}  # Why do this?
       - name: Install Dependencies
         run: |
-          npm install --no-progress
+          npm install
           pip install flake8 pytest
+      - name: Display node-gyp cache
+        run: |
+          ls $env:LOCALAPPDATA\node-gyp\Cache\21.2.0\include\node
       - name: Set Windows environment
         if: startsWith(matrix.os, 'windows')
         run: |
